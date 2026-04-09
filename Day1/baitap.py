@@ -14,25 +14,34 @@
 # 2
 # import math
 # class Rectangle:
-#     def __init__(self, h, w): self.h, self.w = h, w
-#     def perimeter(self): return 2*(self.h+self.w)
-#     def area(self): return self.h*self.w
+#     def __init__(self,height,width):
+#         self.height = height
+#         self.width = width
+#     def chuvi(self):
+#         return (self.height + self.width) * 2
+#     def dientich(self):
+#         return self.height * self.width
 # class Circle:
-#     def __init__(self, r): self.r = r
-#     def perimeter(self): return 2*math.pi*self.r
-#     def area(self): return math.pi*self.r**2
-# shape = input("Shape (rectangle|circle): ").lower()
+#     def __init__(self, r):
+#         self.r = r
+#     def chuvi(self):
+#         return 2 * math.pi * self.r
+#     def dientich(self):
+#         return math.pi * self.r * self.r
+# shape = input("Nhap hinh (rectangle/circle): ")
 # if shape == "rectangle":
-#     h = float(input("Height: "))
-#     w = float(input("Width: "))
-#     r = Rectangle(h,w)
-#     print(r.perimeter(), r.area())
+#     height = float(input("Nhap chieu cao: "))
+#     width = float(input("Nhap chieu rong: "))
+#     rect = Rectangle(height, width)
+#     print("Chu vi:", rect.chuvi())
+#     print("Dien tich:", rect.dientich())
 # elif shape == "circle":
-#     r = float(input("Radius: "))
-#     c = Circle(r)
-#     print(c.perimeter(), c.area())
+#     r = float(input("Nhap ban kinh: "))
+#     cir = Circle(r)
+#     print("Chu vi:", cir.chuvi())
+#     print("Dien tich:", cir.dientich())
 # else:
-#     print("Invalid!")
+#     print("Ko hop le")
 
 # 3
 # from datetime import datetime
@@ -40,22 +49,23 @@
 #     def __init__(self):
 #         self.now = datetime.now()
 #     def get_date(self):
-#         return f"{self.now.day:02d}/{self.now.month:02d}/{self.now.year}"
+#         return str(self.now.day)+"/"+str(self.now.month)+"/"+str(self.now.year)
 #     def get_time(self):
-#         return f"{self.now.hour:02d}:{self.now.minute:02d}:{self.now.second:02d}"
-# now = CustomDate()
-# print(now.get_date())
-# print(now.get_time())
+#         return str(self.now.hour)+":"+str(self.now.minute)+":"+str(self.now.second)
+# today = CustomDate()
+# print("Ngay:", today.get_date())
+# print("Gio:", today.get_time())
 
 # 4
 # from datetime import datetime
 # class DateHandler:
-#     @staticmethod
-#     def format_date(d): return f"{d.day:02d}/{d.month:02d}/{d.year}"
-#     @staticmethod
-#     def get_days_between(d1, d2): return (d2 - d1).days
-# start = datetime(2021,1,1)
-# end = datetime(2022,1,1)
-# print(DateHandler.format_date(start))
-# print(DateHandler.format_date(end))
-# print(DateHandler.get_days_between(start, end))
+#     def format_date(self, d):
+#         return str(d.day)+"/"+str(d.month)+"/"+str(d.year)
+#     def get_days_between(self, d1, d2):
+#         return (d2 - d1).days
+# date = DateHandler()
+# start = datetime(2021, 1, 1)
+# end = datetime(2022, 1, 1)
+# print(date.format_date(start))
+# print(date.format_date(end))
+# print("So ngay:", date.get_days_between(start, end))

@@ -1,0 +1,21 @@
+# Buoi 3:
+import pandas as pd
+df = pd.read_csv("hw2_data.csv")
+print(df.head())
+
+# Buoi 3:
+# Cau hoi 1:
+tren_30 = df[df["Age"] > 30]
+so_nguoi_tren_30 = len(tren_30)
+print("So nguoi tren 30:", so_nguoi_tren_30)
+
+# Buoi 3:
+# Cau hoi 2:
+tong_luong = df["Salary"].sum()
+print("Tong so tien luong:", tong_luong)
+
+# Buoi 3:
+# Cau hoi 3:
+loc_du_lieu = df[(df["Salary"] > 50000) & (df["Age"] < 40)]
+so_nguoi = len(loc_du_lieu)
+print("So nguoi co luong > 50000 và tuoi < 40 là:", so_nguoi)

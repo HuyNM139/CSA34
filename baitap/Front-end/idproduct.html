@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background:
+                radial-gradient(circle at top left, #dbeafe 0%, transparent 35%),
+                radial-gradient(circle at top right, #e9d5ff 0%, transparent 30%),
+                linear-gradient(135deg, #eff6ff, #f8fafc 45%, #eef2ff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            color: #0f172a;
+        }
+
+        .box {
+            width: 100%;
+            max-width: 700px;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 28px;
+            padding: 28px;
+            box-shadow: 0 24px 60px rgba(15, 23, 42, 0.14);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .box::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #2563eb, #7c3aed, #06b6d4);
+        }
+
+        h1.title {
+            margin: 0 0 22px;
+            text-align: center;
+            font-size: 32px;
+            letter-spacing: 0.3px;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .field {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 18px;
+            padding: 16px 18px;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        .label {
+            display: block;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+            word-break: break-word;
+        }
+
+        .available {
+            color: #16a34a;
+        }
+
+        .unavailable {
+            color: #dc2626;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 22px;
+            flex-wrap: wrap;
+        }
+
+        a.back {
+            text-decoration: none;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 14px;
+            font-weight: bold;
+            box-shadow: 0 12px 24px rgba(37, 99, 235, 0.25);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        a.back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 28px rgba(37, 99, 235, 0.32);
+        }
+
+        @media (max-width: 640px) {
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .box {
+                padding: 20px;
+            }
+
+            h1.title {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>ID: <span id="id"></span></h1>
+        <h1>Name: <span id="name"></span></h1>
+        <h1>Category: <span id="category"></span></h1>
+        <h1>Price: <span id="price"></span></h1>
+        <h1>Stock: <span id="stock"></span></h1>
+        <h1>Rating: <span id="rating"></span></h1>
+        <h1>Available: <span id="is_available"></span></h1>
+    </div>
+    <script src="./idproduct.js"></script>
+</body>
+</html>

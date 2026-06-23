@@ -8,25 +8,43 @@ fetch("http://127.0.0.1:5000/")
     console.log(err);
 })
 
-let name = document.getElementById("name")
-let email = document.getElementById("email")
-let phone = document.getElementById("phone")
-let fav1 = document.getElementById("fav1")
-let fav2 = document.getElementById("fav2")
-let fav3 = document.getElementById("fav3")
-
 // Gọi API để lấy ra dữ liệu
 fetch("http://127.0.0.1:5000/get_person_information")
-.then(res => res.json())
-.then(data => {
-    console.log(data)
-    name.innerText = data.name
-    email.innerText = data.email
-    phone.innerText = data.phone
-    fav1.innerText = data.favorites[0]
-    fav2.innerText = data.favorites[1]
-    fav3.innerText = data.favorites[2]
-})
-.catch(err => {
-    console.log(err);
-})
+  .then(res => res.json())
+  .then(data => {
+    let user = data[0];
+    document.getElementById("first_name").textContent = user[1];
+    document.getElementById("last_name").textContent = user[2];
+    document.getElementById("email").textContent = user[3];
+    document.getElementById("phone").textContent = user[4];
+    document.getElementById("city").textContent = user[5];
+    document.getElementById("country").textContent = user[6];
+
+  })
+  .catch(err => {
+      console.log(err);
+  })
+
+
+// POST
+let getStartedBtn = document.getElementById("getStartedBtn");
+getStartedBtn.addEventListener("click", () => {
+  fetch("http://127.0.0.1:5000/create_person", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: "Minh Huy",
+      age: 13,
+      address: "TP.HCM",
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});

@@ -6,7 +6,59 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Name: <span id="name"></span></h1>
+    <style>
+        body{
+            background-color: rgb(231, 249, 255);
+            font-family: Arial;
+        }
+        .container{
+            width: 500px;
+            margin: 50px auto;
+            background-color: white;
+            border-radius:4px;
+            overflow:hidden;
+            box-shadow:0 0 15px rgba(0,0,0,0.15);
+        }
+        .header{
+            background-color: #0f5d87;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 30px;
+        }
+        .content{
+            padding: 20px;
+        }
+        .input{
+            margin-bottom: 15px;
+        }
+        label{
+            display: block;
+            margin-bottom: 5px;
+        }
+        input,
+        select{
+            border-radius: 4px;
+            width:95%;
+            height:42px;
+            border:1px solid #ddd;
+            padding:0 10px;
+            font-size:16px;
+            outline:none;
+        }
+        button{
+            width: 100%;
+            height: 40px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+        }
+        button:hover{
+            cursor: pointer;
+            background-color: #2a79ad;
+        }
+    </style>
+    <!-- <h1>Name: <span id="name"></span></h1>
     <h1>Email: <span id="email"></span></h1>
     <h1>Phone: <span id="phone"></span></h1>
     <h1>Favorites: </h1>
@@ -14,7 +66,54 @@
         <li>Favorite 1: <span id="fav1"></span></li>
         <li>Favorite 2: <span id="fav2"></span></li>
         <li>Favorite 3: <span id="fav3"></span></li>
-    </ul>
+    </ul> -->
+
+<div class="container">
+    <div class="header">
+        Registration Form
+    </div>
+    <div class="content">
+        <div class="input">
+            <label id="first_name">First Name</label>
+            <input type="text">
+        </div>
+        <div class="input">
+            <label id="last_name">Last Name</label>
+            <input type="text">
+        </div>
+        <div class="input">
+            <label id="email">Email Address</label>
+            <input type="text">
+        </div>
+        <div class="input">
+            <label id="phone">Phone</label>
+            <input type="text">
+        </div>
+
+        <div class="row">
+            <div class="input">
+                <label>City</label>
+                <select>
+                    <option>London</option>
+                    <option>Paris</option>
+                    <option>Tokyo</option>
+                    <option>Ha Noi</option>
+                </select>
+            </div>
+            <div class="input">
+                <label>Country</label>
+                <select>
+                    <option>India</option>
+                    <option>Vietnam</option>
+                    <option>USA</option>
+                </select>
+            </div>
+        </div>
+        <button id="getStartedBtn">Get Started</button>
+    </div>
+</div>
+    </div>
+    <!-- <button id="createPersonBtn">Create Person</button> -->
     <script src="./app.js"></script>
 </body>
 </html>

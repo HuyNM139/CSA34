@@ -28,23 +28,29 @@ fetch("http://127.0.0.1:5000/get_person_information")
 
 // POST
 let getStartedBtn = document.getElementById("getStartedBtn");
+
 getStartedBtn.addEventListener("click", () => {
-  fetch("http://127.0.0.1:5000/create_person", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      name: "Minh Huy",
-      age: 13,
-      address: "TP.HCM",
-    }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log(data);
+
+    fetch("http://127.0.0.1:5000/create_person", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            first_name: document.getElementById("first_name").value,
+            last_name: document.getElementById("last_name").value,
+            email: document.getElementById("email").value,
+            phone: document.getElementById("phone").value,
+            city: document.getElementById("city").value,
+            country: document.getElementById("country").value
+        })
     })
-    .catch((err) => {
-      console.log(err);
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message);
+    })
+    .catch(err => {
+        console.log(err);
     });
+
 });

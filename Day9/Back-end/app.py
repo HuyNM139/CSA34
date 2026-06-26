@@ -55,10 +55,30 @@ def get_person_information():
 
 @app.route("/create_person", methods=["POST"])
 def create_person():
+
     request_data = request.get_json()
-    print("Received data:", request_data)
+
+    conn = sqlite3.connect("person.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    INSERT INTO users
+    (first_name, last_name, email, phone, city, country)
+    VALUES (?, ?, ?, ?, ?, ?)
+    """, (
+        request_data["first_name"],
+        request_data["last_name"],
+        request_data["email"],
+        request_data["phone"],
+        request_data["city"],
+        request_data["country"]
+    ))
+
+    conn.commit()
+    conn.close()
+
     return jsonify({
-        "message": "Data sent successfully!"
+        "message": "Person created successfully!"
     })
 
 if __name__ == "__main__":

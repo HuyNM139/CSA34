@@ -1,30 +1,56 @@
-let addGameBtn = document.getElementById("addGameBtn")
+let userID = localStorage.getItem("user_id");
+
+if(userID == null){
+    window.location.href = "login.html";
+}
+document.getElementById("username").textContent = localStorage.getItem("username");
+
+let addGameBtn = document.getElementById("addGameBtn");
+
 addGameBtn.addEventListener("click", () => {
+
+    let name = document.getElementById("name").value.trim();
+    let genre = document.getElementById("genre").value.trim();
+    let hours = document.getElementById("hours").value.trim();
+    let status = document.getElementById("status").value.trim();
+
+    if(name === "" || genre === "" || hours === "" || status === ""){
+        alert("Please fill in all fields.");
+        return;
+    }
+
     fetch("http://127.0.0.1:5000/games", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            name: document.getElementById("name").value,
-            genre: document.getElementById("genre").value,
-            hours_played: document.getElementById("hours").value,
-            status: document.getElementById("status").value
+            user_id:localStorage.getItem("user_id"),
+            name: name,
+            genre: genre,
+            hours_played: hours,
+            status: status
         })
     })
     .then(res => res.json())
     .then(data => {
-        alert(data.message)
+        alert(data.message);
+        loadGames();
+
+        document.getElementById("name").value = "";
+        document.getElementById("genre").value = "";
+        document.getElementById("hours").value = "";
+        document.getElementById("status").value = "";
     })
     .catch(err => {
-        console.log(err)
-    })
-    loadGames()
-})
+        console.log(err);
+    });
+
+});
 
 
 function loadGames() {
-    fetch("http://127.0.0.1:5000/games")
+    fetch("http://127.0.0.1:5000/games/" + userID)
     .then(res => res.json())
     .then(data => {
         let html = "";
@@ -63,33 +89,48 @@ function deleteGame(id) {
 }
 
 function editGame(id){
-    let newHours = prompt("New Hours Played: ")
+
+    let newHours = prompt("New Hours Played:");
+
+    if(newHours === null){
+        return;
+    }
+
+    newHours = newHours.trim();
+
+    if(newHours === ""){
+        alert("Hours Played cannot be empty.");
+        return;
+    }
+
     fetch("http://127.0.0.1:5000/games/" + id, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
+        method:"PUT",
+        headers:{
+            "Content-Type":"application/json"
         },
-        body: JSON.stringify({
-            hours_played: newHours
+        body:JSON.stringify({
+            hours_played:newHours
         })
     })
-    .then(res => res.json())
-    .then(data => {
-        alert(data.message)
-        loadGames()
+    .then(res=>res.json())
+    .then(data=>{
+        alert(data.message);
+        loadGames();
     })
-    .catch(err => {
-        console.log(err)
-    })
+    .catch(err=>{
+        console.log(err);
+    });
+
 }
 
 function loadStats(){
     fetch("http://127.0.0.1:5000/stats")
     .then(res=>res.json())
     .then(data=>{
-        document.getElementById("totalGames").textContent = "Total Games: " + data.total
-        document.getElementById("playingGames").textContent = "Playing: " + data.playing
-        document.getElementById("completedGames").textContent ="Completed: " + data.completed
+        document.getElementById("totalGames").textContent = data.total
+        document.getElementById("playingGames").textContent = data.playing
+        document.getElementById("completedGames").textContent =data.completed
+        document.getElementById("wishlistGames").textContent = data.wishlist
     })
 }
 loadGames();
@@ -114,3 +155,13 @@ function searchGame(){
         document.getElementById("gameList").innerHTML = html;
     });
 }
+
+document.getElementById("logoutBtn")
+.addEventListener("click",()=>{
+
+    localStorage.removeItem("user_id");
+    localStorage.removeItem("username");
+
+    window.location.href="login.html";
+
+});

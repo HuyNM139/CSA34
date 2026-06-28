@@ -31,6 +31,7 @@ def add_game():
     VALUES(?, ?, ?, ?)
     """,
     (
+        request_data["user_id"],
         request_data["name"],
         request_data["genre"],
         request_data["hours_played"],
@@ -86,11 +87,14 @@ def stats():
     playing = cursor.fetchone()[0]
     cursor.execute("SELECT COUNT(*) FROM games WHERE status='Completed'")
     completed = cursor.fetchone()[0]
+    cursor.execute("SELECT COUNT(*) FROM games WHERE status='Wishlist'")
+    wishlist = cursor.fetchone()[0]
     conn.close()
     return jsonify({
         "total":total,
         "playing":playing,
-        "completed":completed
+        "completed":completed,
+        "wishlist":wishlist
     })
 
 @app.route("/search/<name>")
@@ -104,6 +108,105 @@ def search(name):
     data = cursor.fetchall()
     conn.close()
     return jsonify(data)
+
+@app.route("/register", methods=["POST"])
+def register():
+
+    request_data = request.get_json()
+
+    username = request_data["username"].strip()
+    password = request_data["password"].strip()
+
+    if username == "" or password == "":
+        return jsonify({
+            "success": False,
+            "message": "Please fill in all fields."
+        })
+
+    conn = sqlite3.connect("games.db")
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT * FROM users WHERE username=?",
+        (username,)
+    )
+
+    user = cursor.fetchone()
+
+    if user:
+        conn.close()
+        return jsonify({
+            "success": False,
+            "message": "Username already exists."
+        })
+
+    cursor.execute(
+        "INSERT INTO users(username,password) VALUES(?,?)",
+        (username,password)
+    )
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({
+        "success": True,
+        "message": "Register successful."
+    })
+
+@app.route("/login", methods=["POST"])
+def login():
+
+    request_data = request.get_json()
+
+    username = request_data["username"].strip()
+    password = request_data["password"].strip()
+
+    if username == "" or password == "":
+        return jsonify({
+            "success": False,
+            "message": "Please fill in all fields."
+        })
+
+    conn = sqlite3.connect("games.db")
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT * FROM users WHERE username=? AND password=?",
+        (username,password)
+    )
+
+    user = cursor.fetchone()
+
+    conn.close()
+
+    if user:
+        return jsonify({
+            "success": True,
+            "user_id": user[0],
+            "username": user[1]
+        })
+
+    return jsonify({
+        "success": False,
+        "message": "Wrong username or password."
+    })
+
+@app.route("/games/<int:user_id>", methods=["GET"])
+def get_games(user_id):
+
+    conn = sqlite3.connect("games.db")
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT * FROM games WHERE user_id=?",
+        (user_id,)
+    )
+
+    games = cursor.fetchall()
+
+    conn.close()
+
+    return jsonify(games)
 
 if __name__ == "__main__":
     app.run(debug=True)

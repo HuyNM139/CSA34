@@ -4,25 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Document</title>
+    <title>Game Collection Manager</title>
 </head>
 <body>
     <div class="container">
+        <h2>
+            Welcome,
+            <span id="username"></span>
+        </h2>
+        <button id="logoutBtn">Logout</button>
         <h1>🎮 Game Collection Manager 🎮</h1>
         <input type="text" id="name" placeholder="Game Name">
         <input type="text" id="genre" placeholder="Genre">
         <input type="number" id="hours" placeholder="Hours Played">
-        <input type="text" id="status" placeholder="Status">
+        <select type="text" id="status" placeholder="Status">
+            <option value="Playing">Playing</option>
+            <option value="Completed">Completed</option>
+            <option value="Wishlist">Wishlist</option>
+        </select>
         <button id="addGameBtn">Add Game➕</button>
         <hr>
         <h2>My Games</h2>
-        <input type="text" id="search" placeholder="Search game..."> <button onclick="searchGame()">Search</button>
+        <input type="text" id="search" placeholder="Search game..."> <button onclick="searchGame()">Search🔍</button>
         <div id="gameList"></div>
         <h2>Statistics📊</h2>
-        <p id="totalGames"></p>
-        <p id="playingGames"></p>
-        <p id="completedGames"></p>
-    </div>
+        <div class="stats">
+            <div class="card">
+                <h3>Total Games</h3>
+                <p id="totalGames">0</p>
+            </div>
+            <div class="card">
+                <h3>Playing</h3>
+                <p id="playingGames">0</p>
+            </div>
+            <div class="card">
+                <h3>Completed</h3>
+                <p id="completedGames">0</p>
+            </div>
+            <div class="card">
+                <h3>Wishlist</h3>
+                <p id="wishlistGames">0</p>
+            </div>
+        </div>
+            </div>
     <script src="app.js"></script>
 </body>
 </html>

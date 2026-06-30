@@ -3,7 +3,7 @@ let userID = localStorage.getItem("user_id");
 if(userID == null){
     window.location.href = "login.html";
 }
-document.getElementById("username").textContent = localStorage.getItem("username");
+document.getElementById("username").textContent = localStorage.getItem("full_name");
 
 let addGameBtn = document.getElementById("addGameBtn");
 
@@ -57,10 +57,10 @@ function loadGames() {
         data.forEach(game => {
             html += `
             <div class="game">
-                <h3>${game[1]}</h3>
-                <p>Genre: ${game[2]}</p>
-                <p>Hours Played: ${game[3]}</p>
-                <p>Status: ${game[4]}</p>
+                <h3>${game[2]}</h3>
+                <p>Genre: ${game[3]}</p>
+                <p>Hours Played: ${game[4]}</p>
+                <p>Status: ${game[5]}</p>
                 <button onclick="deleteGame(${game[0]})">Delete🗑️</button>
                 <button onclick="editGame(${game[0]})">Edit✏️</button>
             </div>

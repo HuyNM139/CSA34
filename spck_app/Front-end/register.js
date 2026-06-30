@@ -1,11 +1,12 @@
 let registerBtn = document.getElementById("registerBtn");
 
 registerBtn.addEventListener("click", () => {
+    let firstName=document.getElementById("firstName").value.trim();
+    let lastName=document.getElementById("lastName").value.trim();
+    let email=document.getElementById("email").value.trim();
+    let password=document.getElementById("password").value;
 
-    let username = document.getElementById("username").value.trim();
-    let password = document.getElementById("password").value.trim();
-
-    if(username === "" || password === ""){
+    if(firstName === "" || lastName === "" || email === "" || password === ""){
         alert("Please fill in all fields.");
         return;
     }
@@ -15,9 +16,11 @@ registerBtn.addEventListener("click", () => {
         headers:{
             "Content-Type":"application/json"
         },
-        body:JSON.stringify({
-            username:username,
-            password:password
+        body: JSON.stringify({
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            password: password
         })
     })
     .then(res=>res.json())
@@ -31,4 +34,18 @@ registerBtn.addEventListener("click", () => {
 
     });
 
+});
+let password=document.getElementById("password");
+password.addEventListener("input", ()=>{
+    let value=password.value;
+    let strength=document.getElementById("strength");
+    if(value.length<8){
+        strength.innerHTML="Weak";
+    }
+    else if(value.length<12){
+        strength.innerHTML="Medium";
+    }
+    else{
+        strength.innerHTML="Strong";
+    }
 });

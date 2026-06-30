@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
+import re
 import sqlite3
 
 app = Flask(__name__)
@@ -10,25 +11,32 @@ CORS(app)
 def home():
     return "Game Collection Manager"
 
-@app.route("/games", methods=["GET"])
-def get_games():
+@app.route("/games/<int:user_id>", methods=["GET"])
+def get_games(user_id):
+
     conn = sqlite3.connect("games.db")
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM games")
-    data = cursor.fetchall()
+
+    cursor.execute(
+        "SELECT * FROM games WHERE user_id=?",
+        (user_id,)
+    )
+
+    games = cursor.fetchall()
+
     conn.close()
-    return jsonify(data)
+
+    return jsonify(games)
 
 @app.route("/games", methods=["POST"])
 def add_game():
     request_data = request.get_json()
     conn = sqlite3.connect("games.db")
     cursor = conn.cursor()
-    cursor.execute(
-    """
+    cursor.execute("""
     INSERT INTO games
-    (name, genre, hours_played, status)
-    VALUES(?, ?, ?, ?)
+    (user_id, name, genre, hours_played, status)
+    VALUES (?, ?, ?, ?, ?)
     """,
     (
         request_data["user_id"],
@@ -36,8 +44,7 @@ def add_game():
         request_data["genre"],
         request_data["hours_played"],
         request_data["status"]
-    )
-    )
+    ))
     conn.commit()
     conn.close()
     return jsonify({
@@ -111,102 +118,103 @@ def search(name):
 
 @app.route("/register", methods=["POST"])
 def register():
-
     request_data = request.get_json()
+    first_name = request_data["first_name"].strip()
+    last_name = request_data["last_name"].strip()
+    email = request_data["email"].strip()
+    password = request_data["password"]
+    if first_name == "":
+        return jsonify({"success":False,"message":"First Name is required."})
+    if last_name == "":
+        return jsonify({"success":False,"message":"Last Name is required."})
+    if email == "":
+        return jsonify({"success":False,"message":"Email is required."})
+    if password == "":
+        return jsonify({"success":False,"message":"Password is required."})
 
-    username = request_data["username"].strip()
-    password = request_data["password"].strip()
+    email_pattern = r'^[^@]+@[^@]+\.[^@]+$'
 
-    if username == "" or password == "":
-        return jsonify({
-            "success": False,
-            "message": "Please fill in all fields."
-        })
+    if not re.match(email_pattern,email):
+        return jsonify({"success":False,"message":"Invalid email."})
+
+    if len(password) < 8:
+        return jsonify({"success":False,"message":"Password must be at least 8 characters."})
 
     conn = sqlite3.connect("games.db")
     cursor = conn.cursor()
 
     cursor.execute(
-        "SELECT * FROM users WHERE username=?",
-        (username,)
+        "SELECT * FROM users WHERE email=?",
+        (email,)
     )
 
-    user = cursor.fetchone()
-
-    if user:
+    if cursor.fetchone():
         conn.close()
         return jsonify({
-            "success": False,
-            "message": "Username already exists."
+            "success":False,
+            "message":"Email already exists."
         })
 
     cursor.execute(
-        "INSERT INTO users(username,password) VALUES(?,?)",
-        (username,password)
+        """
+        INSERT INTO users
+        (first_name,last_name,email,password)
+        VALUES(?,?,?,?)
+        """,
+        (
+            first_name,
+            last_name,
+            email,
+            password
+        )
     )
 
     conn.commit()
     conn.close()
 
     return jsonify({
-        "success": True,
-        "message": "Register successful."
+        "success":True,
+        "message":"Register Successful."
     })
 
 @app.route("/login", methods=["POST"])
 def login():
-
     request_data = request.get_json()
+    email = request_data["email"].strip()
+    password = request_data["password"]
 
-    username = request_data["username"].strip()
-    password = request_data["password"].strip()
-
-    if username == "" or password == "":
+    if email == "" or password == "":
         return jsonify({
-            "success": False,
-            "message": "Please fill in all fields."
+            "success":False,
+            "message":"Please fill in all fields."
         })
-
     conn = sqlite3.connect("games.db")
     cursor = conn.cursor()
-
     cursor.execute(
-        "SELECT * FROM users WHERE username=? AND password=?",
-        (username,password)
+        """
+        SELECT *
+        FROM users
+        WHERE email=? AND password=?
+        """,
+        (
+            email,
+            password
+        )
     )
 
     user = cursor.fetchone()
-
     conn.close()
-
     if user:
         return jsonify({
-            "success": True,
-            "user_id": user[0],
-            "username": user[1]
+            "success":True,
+            "user_id":user[0],
+            "first_name":user[1],
+            "last_name":user[2]
         })
-
     return jsonify({
-        "success": False,
-        "message": "Wrong username or password."
+        "success":False,
+        "message":"Invalid email or password."
     })
-
-@app.route("/games/<int:user_id>", methods=["GET"])
-def get_games(user_id):
-
-    conn = sqlite3.connect("games.db")
-    cursor = conn.cursor()
-
-    cursor.execute(
-        "SELECT * FROM games WHERE user_id=?",
-        (user_id,)
-    )
-
-    games = cursor.fetchall()
-
-    conn.close()
-
-    return jsonify(games)
 
 if __name__ == "__main__":
     app.run(debug=True)

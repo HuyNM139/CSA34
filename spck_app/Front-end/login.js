@@ -1,12 +1,23 @@
 let loginBtn = document.getElementById("loginBtn");
 
 loginBtn.addEventListener("click",()=>{
+    let email = document.getElementById("email").value.trim();
+    let password = document.getElementById("password").value;
 
-    let username = document.getElementById("username").value.trim();
-    let password = document.getElementById("password").value.trim();
+    if(email==""){
+        alert("Please enter your email.");
+        return;
+    }
 
-    if(username === "" || password === ""){
-        alert("Please fill in all fields.");
+    let emailPattern=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if(!emailPattern.test(email)){
+        alert("Invalid email.");
+        return;
+    }
+
+    if(password==""){
+        alert("Please enter your password.");
         return;
     }
 
@@ -19,7 +30,7 @@ loginBtn.addEventListener("click",()=>{
         },
 
         body:JSON.stringify({
-            username:username,
+            email:email,
             password:password
         })
 
@@ -30,8 +41,11 @@ loginBtn.addEventListener("click",()=>{
 
         if(data.success){
 
-            localStorage.setItem("user_id",data.user_id);
-            localStorage.setItem("username",data.username);
+            localStorage.setItem("user_id", data.user_id);
+            localStorage.setItem(
+                "full_name",
+                data.first_name + " " + data.last_name
+            );
 
             window.location.href="index.html";
 
